@@ -34,7 +34,7 @@ type GetGatewayBotResponse struct {
 	SessionStartLimit SessionStartLimit `json:"session_start_limit"`
 }
 
-func (d *DiscordClient) GetGatewayBot(ctx context.Context) (*GetGatewayBotResponse, error) {
+func (d *Client) GetGatewayBot(ctx context.Context) (*GetGatewayBotResponse, error) {
 
 	request, err := http.NewRequestWithContext(ctx, http.MethodGet, fmt.Sprintf("%s%s?encoding=json", d.discordConfig.APIBaseURL, GetGatewayBotURL), nil)
 	if err != nil {

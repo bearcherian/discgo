@@ -11,7 +11,7 @@ type HTTPClient interface {
 	Do(req *http.Request) (*http.Response, error)
 }
 
-type DiscordConfig struct {
+type Config struct {
 	APIBaseURL    string
 	ApplicationID string
 	PublicKey     string
@@ -19,18 +19,14 @@ type DiscordConfig struct {
 	ClientSecret  string
 	BotToken      string
 }
-type DiscordClient struct {
-	discordConfig *DiscordConfig
+type Client struct {
+	discordConfig *Config
 	client        HTTPClient
 	logger        *zap.SugaredLogger
-
-	// websocket dialer and gateway connection
-	// dialer  *websocket.Dialer
-	// gateway *websocket.Conn
 }
 
-func NewClient(options ...DiscordClientOption) *DiscordClient {
-	d := DiscordClient{}
+func NewClient(options ...DiscordClientOption) *Client {
+	d := Client{}
 
 	for _, opt := range options {
 		opt(&d)
@@ -52,7 +48,7 @@ func NewClient(options ...DiscordClientOption) *DiscordClient {
 }
 
 // Do adds headers before calling DiscordClient.http.Do
-func (d *DiscordClient) Do(req *http.Request) (*http.Response, error) {
+func (d *Client) Do(req *http.Request) (*http.Response, error) {
 
 	req.Header.Set("Authorization", "Bot "+d.discordConfig.BotToken)
 
@@ -61,6 +57,6 @@ func (d *DiscordClient) Do(req *http.Request) (*http.Response, error) {
 	return d.client.Do(req)
 }
 
-func (d *DiscordClient) Close() {
+func (d *Client) Close() {
 	// nothing to do here right now
 }

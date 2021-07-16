@@ -4,22 +4,22 @@ import (
 	"go.uber.org/zap"
 )
 
-type DiscordClientOption func(*DiscordClient)
+type DiscordClientOption func(*Client)
 
-func WithDiscordConfig(cfg *DiscordConfig) DiscordClientOption {
-	return func(d *DiscordClient) {
+func WithDiscordConfig(cfg *Config) DiscordClientOption {
+	return func(d *Client) {
 		d.discordConfig = cfg
 	}
 }
 
 func WithHttpClient(c HTTPClient) DiscordClientOption {
-	return func(d *DiscordClient) {
+	return func(d *Client) {
 		d.client = c
 	}
 }
 
 func WithLogger(l *zap.SugaredLogger) DiscordClientOption {
-	return func(dc *DiscordClient) {
+	return func(dc *Client) {
 		dc.logger = l
 	}
 }
