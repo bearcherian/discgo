@@ -63,6 +63,8 @@ func main() {
 	}
 	outputPath := flag.String("o", fmt.Sprintf("%s/structs", workingDir), "output directory path for generated Go files")
 
+	flag.Parse()
+
 	// get the resources folder
 	_, repoContents, _, err := client.Repositories.GetContents(
 		context.Background(),
