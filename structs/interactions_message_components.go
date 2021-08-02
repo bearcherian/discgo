@@ -12,11 +12,11 @@ type Component struct {
 	// Label text that appears on the button, max 80 characters
 	Label string `json:"label"`
 	// Emoji `name`, `id`, and `animated`
-	Emoji partial [emoji](#DOCS_RESOURCES_EMOJI/emoji-object) `json:"emoji"`
+	Emoji Emoji `json:"emoji"`
 	// Url a url for link-style buttons
 	Url string `json:"url"`
 	// Options the choices in the select, max 25
-	Options array of [select options](#DOCS_INTERACTIONS_MESSAGE_COMPONENTS/select-menu-object-select-option-structure) `json:"options"`
+	Options []SelectOption `json:"options"`
 	// Placeholder custom placeholder text if nothing is selected, max 100 characters
 	Placeholder string `json:"placeholder"`
 	// MinValues the minimum number of items that must be chosen; default 1, min 0, max 25
@@ -24,7 +24,7 @@ type Component struct {
 	// MaxValues the maximum number of items that can be chosen; default 1, max 25
 	MaxValues int `json:"max_values"`
 	// Components a list of child components
-	Components array of [components](#DOCS_INTERACTIONS_MESSAGE_COMPONENTS/component-object) `json:"components"`
+	Components []Component `json:"components"`
 }
 
 type Button struct {
@@ -35,7 +35,7 @@ type Button struct {
 	// Label text that appears on the button, max 80 characters
 	Label string `json:"label"`
 	// Emoji `name`, `id`, and `animated`
-	Emoji partial [emoji](#DOCS_RESOURCES_EMOJI/emoji-object) `json:"emoji"`
+	Emoji Emoji `json:"emoji"`
 	// CustomId a developer-defined identifier for the button, max 100 characters
 	CustomId string `json:"custom_id"`
 	// Url a url for link-style buttons
@@ -50,7 +50,7 @@ type SelectMenu struct {
 	// CustomId a developer-defined identifier for the button, max 100 characters
 	CustomId string `json:"custom_id"`
 	// Options the choices in the select, max 25
-	Options array of [select options](#DOCS_INTERACTIONS_MESSAGE_COMPONENTS/select-menu-object-select-option-structure) `json:"options"`
+	Options []SelectOption `json:"options"`
 	// Placeholder custom placeholder text if nothing is selected, max 100 characters
 	Placeholder string `json:"placeholder"`
 	// MinValues the minimum number of items that must be chosen; default 1, min 0, max 25

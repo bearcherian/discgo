@@ -13,7 +13,7 @@ type Team struct {
 	OwnerUserId string `json:"owner_user_id"`
 }
 
-type TeamMembers struct {
+type TeamMember struct {
 	// MembershipState the user's [membership state](#DOCS_TOPICS_TEAMS/data-models-membership-state-enum) on the team
 	MembershipState int `json:"membership_state"`
 	// Permissions will always be `["*"]`
