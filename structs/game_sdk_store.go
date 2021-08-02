@@ -1,5 +1,23 @@
 package structs
 
+type SkuType int
+type EntitlementType int
+
+const (
+	SkuTypeApplication = 1
+	SkuTypeDLC         = 2
+	SkuTypeConsumable  = 3
+	SkuTypeBundle      = 4
+
+	EntitlementTypePurchase            = 1
+	EntitlementTypePremiumSubscription = 2
+	EntitlementTypeDeveloerGift        = 3
+	EntitlementTypeTestModePurchase    = 4
+	EntitlementTypeFreePurchase        = 5
+	EntitlementTypeUserGift            = 6
+	EntitlementTypePremiumPurchase     = 7
+)
+
 type SKU struct {
 	// Id the unique ID of the SKU
 	Id int64 `json:"Id"`

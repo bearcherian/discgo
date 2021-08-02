@@ -1,5 +1,9 @@
 package structs
 
+type ImageType string
+
+const ImageTypeUser ImageType = "User"
+
 type ImageDimensions struct {
 	// Width the width of the image
 	Width uint32 `json:"Width"`

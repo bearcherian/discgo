@@ -1,5 +1,24 @@
 package structs
 
+type LobbyType int
+type SearchComparison int
+type SearchCast int
+
+const (
+	LobbyTypePrivate LobbyType = 1
+	LobbyTypePublic  LobbyType = 2
+
+	SearchComparisonLessThanOrEqual    SearchComparison = -2
+	SearchComparisonLessThan           SearchComparison = -1
+	SearchComparisonEqual              SearchComparison = 0
+	SearchComparisonGreaterThan        SearchComparison = 1
+	SearchComparisonGreaterThanOrEqual SearchComparison = 2
+	SearchComparisonNotEqual           SearchComparison = 3
+
+	SearchCastString SearchCast = 1
+	SearchCastNumber SearchCast = 2
+)
+
 type Lobby struct {
 	// Id the unique id of the lobby
 	Id int64 `json:"Id"`

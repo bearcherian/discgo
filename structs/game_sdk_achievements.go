@@ -18,10 +18,10 @@ type Achievement struct {
 }
 
 type AchievementLocale struct {
-	// Default 
-	Default the default locale for the achievement `json:"default"`
-	// Localizations 
-	Localizations object of [accepted locales](#DOCS_DISPATCH_FIELD_VALUES/predefined-field-values-accepted-locales) as the key and achievement translations as the value `json:"localizations"`
+	// Default the default locale for the achievement
+	Default string `json:"default"`
+	// Localizations object of accepted locales as the key and achievement translations as the value
+	Localizations map[string]string `json:"localizations"`
 }
 
 type UserAchievement struct {

@@ -13,9 +13,9 @@ type SignedAppTicket struct {
 	// ApplicationId the application id for the ticket
 	ApplicationId int64 `json:"application_id"`
 	// User the user for the ticket
-	User [User](#DOCS_GAME_SDK_USER/data-models-user-struct) `json:"user"`
+	User User `json:"user"`
 	// Entitlements the list of the user's entitlements for this application
-	Entitlements list of partial [Entitlements](#DOCS_GAME_SDK_STORE/data-models-entitlement-struct) structs that contain just the SKU id `json:"entitlements"`
+	Entitlements []Entitlement `json:"entitlements"`
 	// Timestamp the ISO 8601 timestamp for the ticket
 	Timestamp string `json:"timestamp"`
 }

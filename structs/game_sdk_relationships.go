@@ -1,5 +1,22 @@
 package structs
 
+type RelationshipType string
+type Status int
+
+const (
+	RelationshipNone            = "None"
+	RelationshipFriend          = "Friend"
+	RelationshipBlocked         = "Blocked"
+	RelationshipPendingIncoming = "PendingIncoming"
+	RelationshipPendingOutgoing = "PendingOutgoing"
+	RelationshipImplicit        = "Implicit"
+
+	StatusOffline      = 0
+	StatusOnline       = 1
+	StatusIdle         = 2
+	StatusDoNotDisturb = 3
+)
+
 type Relationship struct {
 	// Type what kind of relationship it is
 	Type RelationshipType `json:"Type"`
