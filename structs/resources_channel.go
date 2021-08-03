@@ -1,5 +1,15 @@
 package structs
 
+import "time"
+
+type AllowedMentionType string
+
+const (
+	AllowedMentionRole     AllowedMentionType = "roles"
+	AllowedMentionUser     AllowedMentionType = "users"
+	AllowedMentionEveryone AllowedMentionType = "everyone"
+)
+
 type Channel struct {
 	// Id the id of this channel
 	Id string `json:"id"`
@@ -77,9 +87,9 @@ type Message struct {
 	// MentionEveryone whether this message mentions everyone
 	MentionEveryone bool `json:"mention_everyone"`
 	// Mentions users specifically mentioned in the message
-	Mentions array of [user](#DOCS_RESOURCES_USER/user-object) objects, with an additional partial [member](#DOCS_RESOURCES_GUILD/guild-member-object) field `json:"mentions"`
+	Mentions []User `json:"mentions"`
 	// MentionRoles roles specifically mentioned in this message
-	MentionRoles array of [role](#DOCS_TOPICS_PERMISSIONS/role-object) object ids `json:"mention_roles"`
+	MentionRoles []string `json:"mention_roles"`
 	// MentionChannels channels specifically mentioned in this message
 	MentionChannels []ChannelMention `json:"mention_channels"`
 	// Attachments any attached files
@@ -107,15 +117,15 @@ type Message struct {
 	// Flags [message flags](#DOCS_RESOURCES_CHANNEL/message-object-message-flags) combined as a [bitfield](https://en.wikipedia.org/wiki/Bit_field)
 	Flags int `json:"flags"`
 	// ReferencedMessage the message associated with the message_reference
-	ReferencedMessage [message object](#DOCS_RESOURCES_CHANNEL/message-object) `json:"referenced_message"`
+	ReferencedMessage *Message `json:"referenced_message"`
 	// Interaction sent if the message is a response to an [Interaction](#DOCS_INTERACTIONS_SLASH_COMMANDS/)
-	Interaction [message interaction object](#DOCS_INTERACTIONS_SLASH_COMMANDS/message-interaction-object-message-interaction-structure) `json:"interaction"`
+	Interaction InteractionResponse `json:"interaction"`
 	// Thread the thread that was started from this message, includes [thread member](#DOCS_RESOURCES_CHANNEL/thread-member-object) object
 	Thread Channel `json:"thread"`
 	// Components sent if the message contains components like buttons, action rows, or other interactive components
-	Components Array of [message components](#DOCS_INTERACTIONS_MESSAGE_COMPONENTS/component-object) `json:"components"`
+	Components []Component `json:"components"`
 	// StickerItems sent if the message contains stickers
-	StickerItems array of [message sticker item objects](#DOCS_RESOURCES_STICKER/sticker-item-object) `json:"sticker_items"`
+	StickerItems []StickerItem `json:"sticker_items"`
 	// Stickers **Deprecated** the stickers sent with the message
 	Stickers []Sticker `json:"stickers"`
 }
@@ -317,7 +327,7 @@ type ChannelMention struct {
 
 type AllowedMentions struct {
 	// Parse An array of [allowed mention types](#DOCS_RESOURCES_CHANNEL/allowed-mentions-object-allowed-mention-types) to parse from the content.
-	Parse array of allowed mention types `json:"parse"`
+	Parse []AllowedMentionType `json:"parse"`
 	// Roles Array of role_ids to mention (Max size of 100)
 	Roles string `json:"roles"`
 	// Users Array of user_ids to mention (Max size of 100)

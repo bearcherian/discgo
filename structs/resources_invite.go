@@ -1,5 +1,7 @@
 package structs
 
+import "time"
+
 type Invite struct {
 	// Code the invite code (unique ID)
 	Code string `json:"code"`

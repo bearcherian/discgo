@@ -1,5 +1,14 @@
 package structs
 
+import "time"
+
+type IntegrationExpireBehaviorType int
+
+const (
+	IntegrationExpireBehaviorRemoveRole IntegrationExpireBehaviorType = 0
+	IntegrationExpireBehaviorKick       IntegrationExpireBehaviorType = 1
+)
+
 type Guild struct {
 	// Id guild id
 	Id string `json:"id"`
@@ -68,7 +77,7 @@ type Guild struct {
 	// Threads all active threads in the guild that current user has permission to view
 	Threads []Channel `json:"threads"`
 	// Presences presences of the members in the guild, will only include non-offline members if the size is greater than `large threshold`
-	Presences []PresenceUpdate `json:"presences"`
+	Presences []PresenceUpdateEventData `json:"presences"`
 	// MaxPresences the maximum number of presences for the guild (`null` is always returned, apart from the largest of guilds)
 	MaxPresences int `json:"max_presences"`
 	// MaxMembers the maximum number of members for the guild
@@ -170,13 +179,13 @@ type Integration struct {
 	// EnableEmoticons whether emoticons should be synced for this integration (twitch only currently)
 	EnableEmoticons bool `json:"enable_emoticons"`
 	// ExpireBehavior the behavior of expiring subscribers
-	ExpireBehavior [integration expire behavior](#DOCS_RESOURCES_GUILD/integration-object-integration-expire-behaviors) `json:"expire_behavior"`
+	ExpireBehavior IntegrationExpireBehaviorType `json:"expire_behavior"`
 	// ExpireGracePeriod the grace period (in days) before expiring subscribers
 	ExpireGracePeriod int `json:"expire_grace_period"`
 	// User user for this integration
 	User User `json:"user"`
 	// Account integration account information
-	Account Account `json:"account"`
+	Account IntegrationAccount `json:"account"`
 	// SyncedAt when this integration was last synced
 	SyncedAt time.Time `json:"synced_at"`
 	// SubscriberCount how many subscribers this integration has

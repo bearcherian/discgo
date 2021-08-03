@@ -1,5 +1,7 @@
 package structs
 
+import "time"
+
 type GuildTemplate struct {
 	// Code the template code (unique ID)
 	Code string `json:"code"`

@@ -54,6 +54,6 @@ type StickerPack struct {
 }
 
 type Response struct {
-	// StickerPacks 
+	// StickerPacks
 	StickerPacks []StickerPack `json:"sticker_packs"`
 }

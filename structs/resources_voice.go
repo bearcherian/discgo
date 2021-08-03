@@ -1,5 +1,7 @@
 package structs
 
+import "time"
+
 type VoiceState struct {
 	// GuildId the guild id this voice state is for
 	GuildId string `json:"guild_id"`

@@ -4,9 +4,9 @@ type Emoji struct {
 	// Id [emoji id](#DOCS_REFERENCE/image-formatting)
 	Id string `json:"id"`
 	// Name emoji name
-	Name string (can be null only in reaction emoji objects) `json:"name"`
+	Name string `json:"name"`
 	// Roles roles allowed to use this emoji
-	Roles array of [role](#DOCS_TOPICS_PERMISSIONS/role-object) object ids `json:"roles"`
+	Roles []string `json:"roles"`
 	// User user that created this emoji
 	User User `json:"user"`
 	// RequireColons whether this emoji must be wrapped in colons
