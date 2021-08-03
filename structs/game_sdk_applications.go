@@ -13,7 +13,7 @@ type SignedAppTicket struct {
 	// ApplicationId the application id for the ticket
 	ApplicationId int64 `json:"application_id"`
 	// User the user for the ticket
-	User User `json:"user"`
+	User SDKUser `json:"user"`
 	// Entitlements the list of the user's entitlements for this application
 	Entitlements []Entitlement `json:"entitlements"`
 	// Timestamp the ISO 8601 timestamp for the ticket

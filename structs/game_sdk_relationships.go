@@ -21,7 +21,7 @@ type Relationship struct {
 	// Type what kind of relationship it is
 	Type RelationshipType `json:"Type"`
 	// User the user the relationship is for
-	User User `json:"User"`
+	User SDKUser `json:"User"`
 	// Presence that user's current presence
 	Presence Presence `json:"Presence"`
 }

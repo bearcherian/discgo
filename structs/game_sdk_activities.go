@@ -1,6 +1,6 @@
 package structs
 
-type User struct {
+type SDKUser struct {
 	// Id the user's id
 	Id int64 `json:"Id"`
 	// Username their name
