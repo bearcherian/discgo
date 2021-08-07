@@ -163,7 +163,6 @@ func parseFileContents(fileContents string) []string {
 			if typeName != "" && structContents != "" {
 				if _, found := parsedStructs[typeName]; !found {
 					structs = append(structs, fmt.Sprintf(structFormat, typeName, structContents))
-					parsedStructs[typeName] = true
 				}
 			}
 			parsingStructure = false
@@ -211,13 +210,14 @@ func parseFileContents(fileContents string) []string {
 
 		}
 
-		isStructure := stringEndsWith(line, structure) || stringEndsWith(line, "Object") || stringEndsWith(line, "Struct")
+		isStructure := stringEndsWith(line, structure) || stringEndsWith(line, "Object") || stringEndsWith(line, "Struct") || stringEndsWith(line, "Event Fields")
 
 		if isH4 && isStructure {
 			line = strings.Replace(line, "######", "", -1)
 			line = strings.Replace(line, "Structure", "", -1)
 			line = strings.Replace(line, "Object", "", -1)
 			line = strings.Replace(line, "Struct", "", -1)
+			line = strings.Replace(line, "Event Fields", " Event Data", -1)
 			line = strings.Replace(line, " ", "", -1)
 			typeName = line
 			parsingStructure = true
@@ -228,7 +228,6 @@ func parseFileContents(fileContents string) []string {
 	if typeName != "" && structContents != "" {
 		if _, found := parsedStructs[typeName]; !found {
 			structs = append(structs, fmt.Sprintf(structFormat, typeName, structContents))
-			parsedStructs[typeName] = true
 		}
 		parsingStructure = false
 		typeName = ""
@@ -279,6 +278,8 @@ func typeFromString(s, d string) string {
 		typeString += "uint8"
 	case "UInt32":
 		typeString += "uint32"
+	case "UInt64":
+		typeString += "uint64"
 	case "timestamp":
 		typeString += "time.Time"
 	case "object":
