@@ -7,15 +7,16 @@ import (
 
 type GatewayOption func(g *Gateway)
 
-func WithAuthToken(token string) GatewayOption {
-	return func(g *Gateway) {
-		g.authToken = token
-	}
+type Config struct {
+	GatewayURL  string
+	AuthToken   string
+	ShardID     int
+	TotalShards int
 }
 
-func WithGatewayURL(gatewayUrl string) GatewayOption {
+func WithConfig(config Config) GatewayOption {
 	return func(g *Gateway) {
-		g.gatewayURL = gatewayUrl
+		g.config = config
 	}
 }
 
@@ -29,5 +30,5 @@ func WithDialer(d *websocket.Dialer) GatewayOption {
 func WithLogger(l *zap.SugaredLogger) GatewayOption {
 	return func(g *Gateway) {
 		g.logger = l
-	}	
+	}
 }

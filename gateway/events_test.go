@@ -36,11 +36,13 @@ func TestGateway_handleEventHello(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			g := &Gateway{
-				dialer:            tt.fields.dialer,
-				conn:              tt.fields.conn,
-				logger:            tt.fields.logger,
-				authToken:         tt.fields.authToken,
-				gatewayURL:        tt.fields.gatewayURL,
+				dialer: tt.fields.dialer,
+				conn:   tt.fields.conn,
+				logger: tt.fields.logger,
+				config: Config{
+					AuthToken:  tt.fields.authToken,
+					GatewayURL: tt.fields.gatewayURL,
+				},
 				heartbeatInterval: tt.fields.heartbeatInterval,
 				sessionID:         tt.fields.sessionID,
 				lastAck:           tt.fields.lastAck,

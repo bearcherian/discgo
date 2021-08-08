@@ -17,8 +17,8 @@ type Gateway struct {
 	conn   *websocket.Conn
 	logger *zap.SugaredLogger
 
-	authToken         string
-	gatewayURL        string
+	config Config
+
 	heartbeatInterval int
 	sessionID         string
 	lastAck           time.Time
@@ -40,6 +40,10 @@ func NewGateway(options ...GatewayOption) *Gateway {
 		opt(&gateway)
 	}
 
+	if gateway.config.TotalShards == 0 {
+		gateway.config.TotalShards = 1
+	}
+
 	if gateway.dialer == nil {
 		gateway.dialer = websocket.DefaultDialer
 	}
@@ -56,7 +60,7 @@ func (g *Gateway) Start() {
 	ctx, _ := context.WithDeadline(context.Background(), time.Now().Add(10*time.Second))
 
 	// dial and establish a websocket connection
-	conn, _, err := g.dialer.DialContext(ctx, fmt.Sprintf("%s?encoding=json", g.gatewayURL), nil)
+	conn, _, err := g.dialer.DialContext(ctx, fmt.Sprintf("%s?encoding=json", g.config.GatewayURL), nil)
 	if err != nil {
 		g.logger.Errorf("failed to establish a gateway connection %w", err)
 		return
@@ -89,6 +93,7 @@ func (g *Gateway) Start() {
 	if g.sessionID != "" {
 		if err := g.resumeConnection(); err != nil {
 			g.logger.Errorf("failed to resume connection: %v", err)
+			return
 		}
 	}
 
@@ -113,7 +118,7 @@ func (g *Gateway) sendIdentify() error {
 	if err := g.conn.WriteJSON(Payload{
 		Op: OpCodeIdentify,
 		D: Identify{
-			Token:   g.authToken,
+			Token:   g.config.AuthToken,
 			Intents: intents,
 			Properties: IdentifyConnectionProperties{
 				OS:      "docker",
@@ -202,7 +207,7 @@ func (g *Gateway) resumeConnection() error {
 	return g.conn.WriteJSON(Payload{
 		Op: OpCodeResume,
 		D: Resume{
-			Token:     g.authToken,
+			Token:     g.config.AuthToken,
 			SessionId: g.sessionID,
 			Seq:       g.lastSequence,
 		},
