@@ -2,7 +2,6 @@ package gateway
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"time"
 
@@ -231,13 +230,4 @@ func (g *Gateway) Close() error {
 	g.logger.Info("closing connection")
 	g.stopChan <- 1
 	return g.CloseWithCode(websocket.CloseGoingAway)
-}
-
-func dataToStruct(s interface{}, t interface{}) error {
-	bytes, err := json.Marshal(s)
-	if err != nil {
-		return err
-	}
-
-	return json.Unmarshal(bytes, t)
 }
