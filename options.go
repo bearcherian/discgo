@@ -1,4 +1,4 @@
-package gateway
+package discgo
 
 import (
 	"github.com/gorilla/websocket"

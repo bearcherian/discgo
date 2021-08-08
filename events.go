@@ -1,4 +1,4 @@
-package gateway
+package discgo
 
 import (
 	"time"
@@ -312,6 +312,14 @@ type InviteDeleteEventData struct {
 	GuildId string `json:"guild_id"`
 	// Code the unique invite [code](#DOCS_RESOURCES_INVITE/invite-object)
 	Code string `json:"code"`
+}
+
+type MessageCreateEventData struct {
+	Message
+}
+
+type MessageUpdateEventData struct {
+	Message
 }
 
 type MessageDeleteEventData struct {

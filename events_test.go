@@ -1,4 +1,4 @@
-package gateway
+package discgo
 
 import (
 	"testing"

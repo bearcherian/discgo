@@ -1,4 +1,4 @@
-package gateway
+package discgo
 
 import (
 	"context"
@@ -233,11 +233,12 @@ func (g *Gateway) Close() error {
 	return g.CloseWithCode(websocket.CloseGoingAway)
 }
 
-func dataToStruct(s interface{}, t interface{}) error {
-	bytes, err := json.Marshal(s)
+// DataToStruct takes a JSON marshallable struct and Unmarshals it to the target value
+func DataToStruct(source interface{}, target interface{}) error {
+	bytes, err := json.Marshal(source)
 	if err != nil {
 		return err
 	}
 
-	return json.Unmarshal(bytes, t)
+	return json.Unmarshal(bytes, target)
 }
