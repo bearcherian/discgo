@@ -10,7 +10,10 @@ import (
 	"go.uber.org/zap"
 )
 
-type eventHandler func(data interface{})
+// EventHandler is an interface for a function that takes a single interface{} argument which
+// is an Event Data type as listed in events.go and documented in
+// https://discord.com/developers/docs/topics/gateway#commands-and-events-gateway-events
+type EventHandler func(data interface{})
 
 type Gateway struct {
 	dialer *websocket.Dialer
@@ -25,7 +28,7 @@ type Gateway struct {
 	stopChan          chan int
 	lastSequence      int
 
-	eventHandlers map[string][]eventHandler
+	eventHandlers map[string][]EventHandler
 }
 
 func NewGateway(options ...GatewayOption) *Gateway {
@@ -101,6 +104,11 @@ func (g *Gateway) Start() {
 	go g.startHeartBeat(helloData.HeartbeatInterval)
 
 	go g.startListening()
+}
+
+// AddEventHandlers adds and registers a function that will be called when the bot recieves a message for the specified event type
+func (g *Gateway) AddEventHandler(eventType string, handler EventHandler) {
+	g.eventHandlers[eventType] = append(g.eventHandlers[eventType], handler)
 }
 
 func (g *Gateway) sendHeartBeat() {

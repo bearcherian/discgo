@@ -20,7 +20,7 @@ func TestGateway_handleEventHello(t *testing.T) {
 		lastAck           time.Time
 		stopChan          chan int
 		lastSequence      int
-		eventHandlers     map[string][]eventHandler
+		eventHandlers     map[string][]EventHandler
 	}
 	type args struct {
 		p Payload
