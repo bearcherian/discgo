@@ -20,7 +20,7 @@ type Gateway struct {
 	conn   *websocket.Conn
 	logger *zap.SugaredLogger
 
-	config Config
+	config GatewayConfig
 
 	heartbeatInterval int
 	sessionID         string
@@ -29,6 +29,34 @@ type Gateway struct {
 	lastSequence      int
 
 	eventHandlers map[string][]EventHandler
+}
+
+type GatewayConfig struct {
+	GatewayURL  string
+	AuthToken   string
+	ShardID     int
+	TotalShards int
+}
+
+type GatewayOption func(g *Gateway)
+
+func WithConfig(config GatewayConfig) GatewayOption {
+	return func(g *Gateway) {
+		g.config = config
+	}
+}
+
+// WithDialer specifies a custom websocket.Dialer to use when connecting to the Discord Gateway
+func WithDialer(d *websocket.Dialer) GatewayOption {
+	return func(g *Gateway) {
+		g.dialer = d
+	}
+}
+
+func WithLogger(l *zap.SugaredLogger) GatewayOption {
+	return func(g *Gateway) {
+		g.logger = l
+	}
 }
 
 func NewGateway(options ...GatewayOption) *Gateway {
