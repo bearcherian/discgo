@@ -10,9 +10,14 @@ import (
 	"go.uber.org/zap"
 )
 
-// EventHandler is an interface for a function that takes a single interface{} argument which
+// EventHandler is a function that takes a single interface{} argument which
 // is an Event Data type as listed in events.go and documented in
 // https://discord.com/developers/docs/topics/gateway#commands-and-events-gateway-events
+// this is the expected argument for all event handlers, and is intentionally left as an
+// interface{} type, instead of multiple handlers with concrete types. This prevents the
+// need for a new handler each event message, and allows consumers of the library to use
+// their own structs if desired. In order to reduce some code when converting to the desired
+//  struct, the function DataToStruct is provided.
 type EventHandler func(data interface{})
 
 type Gateway struct {
@@ -61,10 +66,11 @@ func WithLogger(l *zap.SugaredLogger) GatewayOption {
 
 func NewGateway(options ...GatewayOption) *Gateway {
 	gateway := Gateway{
-		sessionID:    "",
-		lastAck:      time.Now(),
-		lastSequence: 0,
-		stopChan:     make(chan int, 1),
+		sessionID:     "",
+		lastAck:       time.Now(),
+		lastSequence:  0,
+		stopChan:      make(chan int, 1),
+		eventHandlers: make(map[string][]EventHandler),
 	}
 
 	for _, opt := range options {
@@ -134,7 +140,9 @@ func (g *Gateway) Start() {
 	go g.startListening()
 }
 
-// AddEventHandlers adds and registers a function that will be called when the bot recieves a message for the specified event type
+// AddEventHandlers adds and registers a function that will be called when the bot recieves
+// a message for the specified event type. See EventHandler for the expected func, and
+// DataToStruct on how to handle the function argument
 func (g *Gateway) AddEventHandler(eventType string, handler EventHandler) {
 	g.eventHandlers[eventType] = append(g.eventHandlers[eventType], handler)
 }
@@ -261,7 +269,7 @@ func (g *Gateway) Close() error {
 	return g.CloseWithCode(websocket.CloseGoingAway)
 }
 
-// DataToStruct takes a JSON marshallable struct and Unmarshals it to the target value
+// DataToStruct takes a JSON marshallable struct and Unmarshals it to the target pointer value
 func DataToStruct(source interface{}, target interface{}) error {
 	bytes, err := json.Marshal(source)
 	if err != nil {
