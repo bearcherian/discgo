@@ -1,0 +1,6 @@
+version: 3
+updates:
+  - pacakge-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "daily"
