@@ -278,3 +278,46 @@ func DataToStruct(source interface{}, target interface{}) error {
 
 	return json.Unmarshal(bytes, target)
 }
+
+const (
+	GetGatewayBotURL = "/gateway/bot"
+)
+
+type GetGatewayBotResponse struct {
+	// The WSS URL that can be used for connecting to the gateway
+	Url string `json:"url"`
+	// The recommended number of shards to use when connecting
+	Shards int `json:"shards"`
+	// Information on the current session start limit
+	SessionStartLimit SessionStartLimit `json:"session_start_limit"`
+}
+
+func (d *ApiClient) GetGatewayBot(ctx context.Context) (*GetGatewayBotResponse, *http.Response, error) {
+
+	request, err := http.NewRequestWithContext(ctx, http.MethodGet, fmt.Sprintf("%s%s?encoding=json", d.discordConfig.APIBaseURL, GetGatewayBotURL), nil)
+	if err != nil {
+		return nil, nil, fmt.Errorf("unable to build request: %w", err)
+	}
+
+	resp, err := d.Do(request)
+	if err != nil {
+		return nil, resp, fmt.Errorf("unable to complete request: %w", err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		errBytes, _ := ioutil.ReadAll(resp.Body)
+		return nil, resp, fmt.Errorf("reqeust failed: %d - %s: %s", resp.StatusCode, resp.Status, string(errBytes))
+	}
+
+	responseBytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, resp, fmt.Errorf("unable to read response body: %w", err)
+	}
+
+	var response GetGatewayBotResponse
+	if err = json.Unmarshal(responseBytes, &response); err != nil {
+		return nil, resp, fmt.Errorf("unable to parse JSON: %w", err)
+	}
+
+	return &response, resp, nil
+}
