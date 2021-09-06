@@ -32,7 +32,7 @@ func (g *Gateway) handleOpCodeDispatch(payload Payload) {
 				handler(payload.D)
 			}
 		} else {
-			g.logger.Debugw("no handlers found", "T", payload.T)
+			g.logger.Debugf("no handlers found for event (T) %s", payload.T)
 		}
 	}
 }

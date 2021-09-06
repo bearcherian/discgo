@@ -4,10 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"net/http"
 	"time"
 
 	"github.com/gorilla/websocket"
-	"go.uber.org/zap"
 )
 
 // EventHandler is a function that takes a single interface{} argument which
@@ -23,7 +24,7 @@ type EventHandler func(data interface{})
 type Gateway struct {
 	dialer *websocket.Dialer
 	conn   *websocket.Conn
-	logger *zap.SugaredLogger
+	logger Logger
 
 	config GatewayConfig
 
@@ -58,7 +59,7 @@ func WithDialer(d *websocket.Dialer) GatewayOption {
 	}
 }
 
-func WithLogger(l *zap.SugaredLogger) GatewayOption {
+func WithLogger(l Logger) GatewayOption {
 	return func(g *Gateway) {
 		g.logger = l
 	}
@@ -86,7 +87,7 @@ func NewGateway(options ...GatewayOption) *Gateway {
 	}
 
 	if gateway.logger == nil {
-		gateway.logger = zap.NewNop().Sugar()
+		gateway.logger = &noopLogger{}
 	}
 
 	return &gateway
@@ -181,9 +182,7 @@ func (g *Gateway) sendIdentify() error {
 
 func (g *Gateway) startHeartBeat(interval int) {
 
-	g.logger.With(
-		"interval", interval,
-	).Info("starting heartbeat")
+	g.logger.Infof("starting heartbeat with interval of %d", interval)
 
 	t := time.NewTicker(time.Duration(interval) * time.Millisecond)
 
@@ -225,9 +224,7 @@ func (g *Gateway) startListening() {
 			return
 		} else {
 
-			g.logger.With(
-				"messageType", mType,
-			).Debug("New Reader")
+			g.logger.Debugf("New Reader message of type %s", mType)
 
 			switch mType {
 			case websocket.TextMessage:

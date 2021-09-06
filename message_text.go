@@ -16,7 +16,7 @@ func (g *Gateway) handleTextMessage(reader io.Reader) {
 	var payload Payload
 	json.Unmarshal(bytes, &payload)
 
-	g.logger.Debugw("handling", "opCode", payload.Op)
+	g.logger.Debugf("handling op code %d", payload.Op)
 	switch payload.Op {
 	case OpCodeDispatch:
 		g.handleOpCodeDispatch(payload)
