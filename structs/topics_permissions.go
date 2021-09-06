@@ -27,5 +27,5 @@ type RoleTags struct {
 	// IntegrationId the id of the integration this role belongs to
 	IntegrationId string `json:"integration_id"`
 	// PremiumSubscriber whether this is the guild's premium subscriber role
-	PremiumSubscriber null `json:"premium_subscriber"`
+	PremiumSubscriber interface{} `json:"premium_subscriber"`
 }

@@ -1,21 +1,23 @@
 package structs
 
+import "time"
+
 type Payload struct {
 	// Cmd [payload command](#DOCS_TOPICS_RPC/commands-and-events-rpc-commands)
-	Cmd enum `json:"cmd"`
+	Cmd string `json:"cmd"`
 	// Nonce unique string used once for replies from the server
 	Nonce string `json:"nonce"`
 	// Evt [subscription event](#DOCS_TOPICS_RPC/commands-and-events-rpc-events)
-	Evt enum `json:"evt"`
+	Evt string `json:"evt"`
 	// Data event data
-	Data  `json:"data"`
+	Data interface{} `json:"data"`
 	// Args command arguments
-	Args  `json:"args"`
+	Args interface{} `json:"args"`
 }
 
 type AuthorizeArgument struct {
 	// Scopes scopes to authorize
-	Scopes array of [OAuth2 scopes](#DOCS_TOPICS_OAUTH2/scopes) `json:"scopes"`
+	Scopes []string `json:"scopes"`
 	// ClientId OAuth2 application id
 	ClientId string `json:"client_id"`
 	// RpcToken one-time use RPC token
@@ -38,9 +40,9 @@ type AuthenticateResponse struct {
 	// User the authed user
 	User User `json:"user"`
 	// Scopes authorized scopes
-	Scopes array of [OAuth2 scopes](#DOCS_TOPICS_OAUTH2/scopes) `json:"scopes"`
+	Scopes []string `json:"scopes"`
 	// Expires expiration date of OAuth2 token
-	Expires date `json:"expires"`
+	Expires time.Time `json:"expires"`
 	// Application application the user authorized
 	Application OAuth2Application `json:"application"`
 }
@@ -182,7 +184,12 @@ type VoiceSettingsInput struct {
 	// Volume input voice level (min: 0, max: 100)
 	Volume float32 `json:"volume"`
 	// AvailableDevices array of _read-only_ device objects containing `id` and `name` string keys
-	AvailableDevices [] `json:"available_devices"`
+	AvailableDevices []VoiceDevice `json:"available_devices"`
+}
+
+type VoiceDevice struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
 }
 
 type VoiceSettingsOutput struct {
@@ -191,7 +198,7 @@ type VoiceSettingsOutput struct {
 	// Volume output voice level (min: 0, max: 200)
 	Volume float32 `json:"volume"`
 	// AvailableDevices array of _read-only_ device objects containing `id` and `name` string keys
-	AvailableDevices [] `json:"available_devices"`
+	AvailableDevices []VoiceDevice `json:"available_devices"`
 }
 
 type VoiceSettingsMode struct {
@@ -270,7 +277,7 @@ type ReadyDispatchData struct {
 	// V RPC version
 	V int `json:"v"`
 	// Config server configuration
-	Config RpcServerConfiguration `json:"config"`
+	Config RPCServerConfiguration `json:"config"`
 	// User the user to whom you are connected
 	User User `json:"user"`
 }
@@ -337,7 +344,7 @@ type VoiceConnectionStatusDispatchData struct {
 	// Hostname hostname of the connected voice server
 	Hostname string `json:"hostname"`
 	// Pings last 20 pings (in ms)
-	Pings array of integers `json:"pings"`
+	Pings []int `json:"pings"`
 	// AveragePing average ping (in ms)
 	AveragePing int `json:"average_ping"`
 	// LastPing last ping (in ms)

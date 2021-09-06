@@ -1,8 +1,16 @@
 package structs
 
+type DeviceType string
+
+const (
+	DeviceAudioInput  DeviceType = "audioinput"
+	DeviceAudioOutput DeviceType = "audiooutput"
+	DeviceVideoInput  DeviceType = "videoinput"
+)
+
 type Device struct {
 	// Type the type of device
-	Type [device type](#DOCS_TOPICS_CERTIFIED_DEVICES/models-device-type) `json:"type"`
+	Type DeviceType `json:"type"`
 	// Id the device's Windows UUID
 	Id string `json:"id"`
 	// Vendor the hardware vendor
