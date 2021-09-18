@@ -1,6 +1,12 @@
 package discgo
 
 import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"fmt"
+	"io"
+	"io/ioutil"
 	"net/http"
 )
 
@@ -65,7 +71,7 @@ func NewApiClient(options ...ApiClientOption) *ApiClient {
 	return &d
 }
 
-// Do adds headers before calling DiscordClient.http.Do
+// Do adds headers before calling ApiClient.client.Do
 func (d *ApiClient) Do(req *http.Request) (*http.Response, error) {
 
 	req.Header.Set("Authorization", "Bot "+d.discordConfig.BotToken)
@@ -75,4 +81,133 @@ func (d *ApiClient) Do(req *http.Request) (*http.Response, error) {
 
 func (d *ApiClient) Close() {
 	// nothing to do here right now
+}
+
+func (d *ApiClient) Get(ctx context.Context, endpoint string, t interface{}) (*http.Response, error) {
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, fmt.Sprintf("%s%s", d.discordConfig.APIBaseURL, endpoint), nil)
+	if err != nil {
+		return nil, fmt.Errorf(ErrUnableToCreateRequest, err)
+	}
+
+	resp, err := d.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf(ErrUnableToCompleteRequest, err)
+	}
+
+	data, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return resp, fmt.Errorf(ErrUnableToParseResponse, err)
+	}
+
+	err = json.Unmarshal(data, t)
+	if err != nil {
+		return resp, fmt.Errorf("unable to unmarshal response: %w", err)
+	}
+
+	return resp, nil
+}
+
+func (d *ApiClient) Post(ctx context.Context, endpoint string, payload interface{}, t interface{}) (*http.Response, error) {
+
+	var body io.Reader
+	if payload != nil {
+		data, err := json.Marshal(payload)
+		if err != nil {
+			return nil, fmt.Errorf("unable to marshal payload: %w", err)
+		}
+		body = bytes.NewReader(data)
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, fmt.Sprintf("%s%s", d.discordConfig.APIBaseURL, endpoint), body)
+	if err != nil {
+		return nil, fmt.Errorf(ErrUnableToCreateRequest, err)
+	}
+
+	resp, err := d.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf(ErrUnableToCompleteRequest, err)
+	}
+
+	data, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return resp, fmt.Errorf(ErrUnableToParseResponse, err)
+	}
+
+	err = json.Unmarshal(data, t)
+	if err != nil {
+		return resp, fmt.Errorf("unable to unmarshal response: %w", err)
+	}
+
+	return resp, nil
+}
+
+func (d *ApiClient) Patch(ctx context.Context, endpoint string, payload interface{}, t interface{}) (*http.Response, error) {
+	var body io.Reader
+	if payload != nil {
+		data, err := json.Marshal(payload)
+		if err != nil {
+			return nil, fmt.Errorf("unable to marshal payload: %w", err)
+		}
+		body = bytes.NewReader(data)
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPatch, fmt.Sprintf("%s%s", d.discordConfig.APIBaseURL, endpoint), body)
+	if err != nil {
+		return nil, fmt.Errorf(ErrUnableToCreateRequest, err)
+	}
+
+	resp, err := d.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf(ErrUnableToCompleteRequest, err)
+	}
+
+	data, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return resp, fmt.Errorf(ErrUnableToParseResponse, err)
+	}
+
+	err = json.Unmarshal(data, t)
+	if err != nil {
+		return resp, fmt.Errorf("unable to unmarshal response: %w", err)
+	}
+
+	return resp, nil
+}
+
+func (d *ApiClient) Delete(ctx context.Context, endpoint string, payload interface{}, t interface{}) (*http.Response, error) {
+	var body io.Reader
+	if payload != nil {
+		data, err := json.Marshal(payload)
+		if err != nil {
+			return nil, fmt.Errorf("unable to marshal payload: %w", err)
+		}
+		body = bytes.NewReader(data)
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, fmt.Sprintf("%s%s", d.discordConfig.APIBaseURL, endpoint), body)
+	if err != nil {
+		return nil, fmt.Errorf(ErrUnableToCreateRequest, err)
+	}
+
+	resp, err := d.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf(ErrUnableToCompleteRequest, err)
+	}
+
+	data, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return resp, fmt.Errorf(ErrUnableToParseResponse, err)
+	}
+
+	err = json.Unmarshal(data, t)
+	if err != nil {
+		return resp, fmt.Errorf("unable to unmarshal response: %w", err)
+	}
+
+	return resp, nil
+}
+
+func errorFromResponse(resp *http.Response) error {
+	
 }
