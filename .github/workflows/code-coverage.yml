@@ -21,11 +21,7 @@ jobs:
         run: |
           CVPKG=$(go list ./... | grep -v mocks | tr '\n' ',')
           go test -coverpkg=${CVPKG} -coverprofile=coverage.out -covermode=count  ./...
-      - name: Verify Minimum Coverage
-        run: |
-          set -x
-          total=`go tool cover -func=coverage.out | grep total | grep -Eo '[0-9]+\.[0-9]+'`
-          if (( $(echo "$total <= 50" | bc -l) )) ; then
-            echo "Test coverage failed to mee threshold of 50%"
-            exit 1
-          fi
+      - name: actions-goveralls
+        uses: shogo82148/actions-goveralls@v1.4.7
+        with:
+          path-to-profile: coverage.out

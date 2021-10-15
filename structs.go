@@ -2,6 +2,7 @@ package discgo
 
 import (
 	"encoding/json"
+	"time"
 )
 
 type Payload struct {
@@ -172,4 +173,22 @@ type SessionStartLimit struct {
 	ResetAfter int `json:"reset_after"`
 	// MaxConcurrency The number of identify requests allowed per 5 seconds
 	MaxConcurrency int `json:"max_concurrency"`
+}
+
+type ActiveThreadsResponse struct {
+	// the active threads
+	Threads []Channel `json:"threads"`
+	// a thread member object for each returned thread the current user has joined
+	Members []ThreadMembers `json:"members"`
+}
+
+type ThreadMembers struct {
+	// 	the id of the thread
+	ID string `json:"id"`
+	// the id of the user
+	UserId string `json:"user_id"`
+	// the time the current user last joined the thread
+	JoinTimestamp time.Time `json:"join_timestamp"`
+	// any user-thread settings, currently only used for notifications
+	Flags int `json:"flags"`
 }
